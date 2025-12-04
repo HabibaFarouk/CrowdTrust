@@ -30,7 +30,7 @@ app.get("/api/campaigns/",async(req,res)=>{
   );
 });
 
-app.post("/api/campaigns/",async(req,res)=>{
+app.post("/api/donations/",async(req,res)=>{
     const newDonation = req.body;
     await addDonation(newDonation);
     res.json({ message: "Donation added" });
@@ -40,8 +40,21 @@ app.post("/api/campaigns/",async(req,res)=>{
 
 async function main() {
     // Connect to MongoDB
-    await mongoose.connect("mongodb+srv://habibamfaroukk_db_user:BoqJQLXgJzldvjB3@cluster0.26s4lb0.mongodb.net/CrowdTrust?retryWrites=true&w=majority")
+  async function main() {
+  try {
+    await mongoose.connect("mongodb://habibamfaroukk_db_user:BoqJQLXgJzldvjB3@cluster0-shard-00-00.26s4lb0.mongodb.net:27017,cluster0-shard-00-01.26s4lb0.mongodb.net:27017,cluster0-shard-00-02.26s4lb0.mongodb.net:27017/CrowdTrust?ssl=true&replicaSet=atlas-xxxxx-shard-0&authSource=admin&retryWrites=true&w=majority");
+
     console.log("Connected to MongoDB");
+
+    // You can start your server here, e.g.,
+    // app.listen(3000, () => console.log("Server running on port 3000"));
+  } catch (err) {
+    console.error("MongoDB connection error:", err);
+    process.exit(1); // Exit the process if connection fails
+  }
+}
+
+main();
 
 
     // Once database connection is ready, start listening for requests
