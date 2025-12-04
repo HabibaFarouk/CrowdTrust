@@ -4,15 +4,30 @@ import Campaign from "./models/CampaignSchema.js";
 import Donation from "./models/DonationSchema.js";
 
 const app = express();
-const addDonation = async (Donation) => {
-    await DonationSchema.insertOne(Donation);
+
+const addDonation = async (DonationData) => {
+    const donation = await Donation.create(DonationData);
+    const { campaignId, amount } = donation;
+    const updatedCampaign = await Campaign.findByIdAndUpdate(
+      campaignId,
+      { $inc: { amountCollected: amount } },
+      { new: true }
+    );
 };
+
 
 app.use(express.json());
 
 app.get("/api/campaigns/",async(req,res)=>{
     const Campaigns = await Campaign.find();
-    res.json(Campaigns);
+    res.json(
+    campaigns.map(c => ({
+      title: c.title,
+      amountRequested: c.amountRequested,
+      amountCollected: c.amountCollected,
+      progress: ((c.amountCollected / c.amountRequested) * 100).toFixed(2) + "%"
+    }))
+  );
 });
 
 app.post("/api/campaigns/",async(req,res)=>{
