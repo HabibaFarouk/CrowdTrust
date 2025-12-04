@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
-import Campaign from "./models/CampaignSchema.js";
-import Donation from "./models/DonationSchema.js";
+import Campaign from "./Models/CampaignSchema.js";
+import Donation from "./Models/DonationSchema.js";
 
 const app = express();
 
@@ -19,7 +19,7 @@ const addDonation = async (DonationData) => {
 app.use(express.json());
 
 app.get("/api/campaigns/",async(req,res)=>{
-    const Campaigns = await Campaign.find();
+    const campaigns = await Campaign.find();
     res.json(
     campaigns.map(c => ({
       title: c.title,
@@ -40,7 +40,7 @@ app.post("/api/campaigns/",async(req,res)=>{
 
 async function main() {
     // Connect to MongoDB
-    await mongoose.connect("mongodb+srv://habibamfaroukk_db_user:BoqJQLXgJzldvjB3@cluster0.26s4lb0.mongodb.net/?appName=Cluster0")
+    await mongoose.connect("mongodb+srv://habibamfaroukk_db_user:BoqJQLXgJzldvjB3@cluster0.26s4lb0.mongodb.net/CrowdTrust?retryWrites=true&w=majority")
     console.log("Connected to MongoDB");
 
 
