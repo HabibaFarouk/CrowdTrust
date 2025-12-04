@@ -1,18 +1,26 @@
 import express from "express";
-import Listing from "./models/Listing.js";
 import mongoose from "mongoose";
 import Campaign from "./models/CampaignSchema.js";
+import Donation from "./models/DonationSchema.js";
 
 const app = express();
+const addDonation = async (Donation) => {
+    await DonationSchema.insertOne(Donation);
+};
 
 app.use(express.json());
 
-app.get("/api/campaigns",async(req,res)=>{
+app.get("/api/campaigns/",async(req,res)=>{
     const Campaigns = await Campaign.find();
-    
     res.json(Campaigns);
 });
 
+app.post("/api/campaigns/",async(req,res)=>{
+    const newDonation = req.body;
+    await addDonation(newDonation);
+    res.json({ message: "Donation added" });
+    
+});
 
 
 async function main() {
