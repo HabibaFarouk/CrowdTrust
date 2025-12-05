@@ -8,7 +8,7 @@ const CampaignSchema = new mongoose.Schema({
   category: { type: String, enum: ["Medical", "Education", "Community", "Emergency", "Other"] },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   status: { type: String, enum: ["pending", "approved", "rejected"], default: "pending" },
-  createdAt: { type: Date, default: Date.now }
+//  createdAt: { type: Date, default: Date.now }
 });
 
 
