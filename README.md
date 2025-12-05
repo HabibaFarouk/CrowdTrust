@@ -68,10 +68,10 @@ Crowdfunding platforms often face issues of fraud, low trust, and lack of transp
 
 | Team Member | Assigned Use Case | Brief Description of Responsibility |
 | :--- | :--- | :--- |
-| Jamila Riad | **User Authentication** | Register, Login, JWT handling, Password Hashing. |
+| Jamila Riad | **User Authentication** | Register, Login |
 | Matthew Ghaly | **User Profiles & Donation History** | Display profile detials and a complete history of all donations|
 | Andrew Nabil | **Campaign Creation & Submission Workflow** | Enables users to create fundraising campaigns for review |
-| Habiba Farouk | **Impact Stories, Updates, and Media Uploads** | Tools to keep donors engaged and informed |
+| Habiba Farouk | **Campaign Progress Overview** | Displays each campaign’s title, requested amount, collected amount.|
 | Habiba Farouk | **Campaign Progress Tracking** | Provides real-time visibility into campaign performance |
 
 ---
