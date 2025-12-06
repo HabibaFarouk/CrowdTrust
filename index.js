@@ -5,7 +5,7 @@ import Donation from "./Models/DonationSchema.js";
 import User from "./Models/UserSchema.js";
 
 const app = express();
-
+//Helper Function 
 const getUserProfileWithDonations = async (userId) => {
 
   const user = await User.findById(userId).lean();
@@ -44,6 +44,8 @@ app.get("/", (req, res) => {
     res.send("CrowdTrust is running");
 });
 
+
+ //Campign CRUD operations 
 app.get("/campaigns",async(req,res)=>{
     const campaigns = await Campaign.find();
     res.json(
@@ -71,6 +73,7 @@ app.get("/campaigns/:id",async(req,res)=>{
   );
 });
 
+//Donation CRUD operations
 app.post("/donations", async (req, res) => {
   try {
     await addDonation(req.body);
@@ -80,6 +83,7 @@ app.post("/donations", async (req, res) => {
   }
 });
 
+//User CRUD operations 
 app.get("/profile/:id", async (req, res) => {
   try {
     const data = await getUserProfileWithDonations(req.params.id);
@@ -132,6 +136,7 @@ app.post("/login", async (req, res) => {
     }
 });
 
+ //MongoDB connect and Connection validation
 async function main() {
   await mongoose.connect("mongodb+srv://habibamfaroukk_db_user:BoqJQLXgJzldvjB3@cluster0.26s4lb0.mongodb.net/CrowdTrust?retryWrites=true&w=majority");
 
