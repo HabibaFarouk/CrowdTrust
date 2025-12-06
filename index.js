@@ -74,6 +74,25 @@ app.get("/campaigns/:id",async(req,res)=>{
 });
 
 //Donation CRUD operations
+app.get("/donations",async(req,res)=>{
+     try {
+    const donations = await Donation.find()
+      .populate("userId", "fullName email")
+      .populate("campaignId", "title")
+      .lean();
+    res.json(
+      donations.map(d => ({
+        user: d.userId?.fullName || "Unknown User",
+        campaign: d.campaignId?.title || "Unknown Campaign",
+        amount: d.amount,
+        date: d.date
+      }))
+    );
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch donations" });
+  }
+});
+
 app.post("/donations", async (req, res) => {
   try {
     await addDonation(req.body);
