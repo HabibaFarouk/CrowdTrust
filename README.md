@@ -39,9 +39,9 @@ Crowdfunding platforms often face issues of fraud, low trust, and lack of transp
 * Digital ID Verification
 * Campaign Creation & Submission Workflow
 * AI Fraud Scanning
+* Donation Management
 * Donation Payments (wallets, cards, Fawry, etc.)
-* Campaign Progress Tracking
-* Impact Stories, Updates, and Media Uploads
+* Campaign Progress Overview & real time Tracking
 * Donor Rewards / Badges
 * Admin Review Panel
 * Notifications & Real-Time Updates
@@ -56,8 +56,8 @@ Crowdfunding platforms often face issues of fraud, low trust, and lack of transp
 1.  **User Authentication** (Registration/Login)
 2.  **User Profiles & Donation History**
 3.  **Campaign Creation & Submission Workflow**
-4.  **Impact Stories, Updates, and Media Uploads**
-5.  **Campaign Progress Tracking**
+4.  **Campaign Progress Overview & real time Tracking**
+5.  **Donation Management**
 
 
 
@@ -71,8 +71,8 @@ Crowdfunding platforms often face issues of fraud, low trust, and lack of transp
 | Jamila Riad | **User Authentication** | Register, Login |
 | Matthew Ghaly | **User Profiles & Donation History** | Display profile detials and a complete history of all donations|
 | Andrew Nabil | **Campaign Creation & Submission Workflow** | Enables users to create fundraising campaigns for review |
-| Habiba Farouk | **Campaign Progress Overview** | Displays each campaign’s title, requested amount, collected amount.|
-| Habiba Farouk | **Campaign Progress Tracking** | Provides real-time visibility into campaign performance |
+| Habiba Farouk |**Campaign Progress Overview & real time Tracking** | Displays each campaign’s title, requested amount, collected amount.|
+| Habiba Farouk | **Donation Management** | Tracks all donations made by users and updates campaign progress.|
 
 ---
 
