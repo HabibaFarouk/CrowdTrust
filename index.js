@@ -26,16 +26,37 @@ const getUserProfileWithDonations = async (userId) => {
 };
 
 
-
 const addDonation = async (donationData) => {
+  try {
+    const { campaignId, amount } = donationData;
+    const campaign = await Campaign.findById(campaignId);
+    const remainingAmount = campaign.amountRequested - campaign.amountCollected;
+    if (amount > remainingAmount) {
+      throw new Error(
+        `Donation exceeds the required amount. Remaining needed: ${remainingAmount}`
+      );
+    }
     const donation = await Donation.create(donationData);
-    const { campaignId, amount } = donation;
     const updatedCampaign = await Campaign.findByIdAndUpdate(
       campaignId,
-      { $inc: { amountCollected: amount } },
+      { 
+        $inc: { amountCollected: amount },
+        ...(amount === remainingAmount && { status: "Completed" })
+      },
       { new: true }
-      );
+    );
+    return {
+      message: "Donation added successfully",
+      donation,
+      updatedCampaign
+    };
+
+  } catch (err) {
+    console.error(err.message);
+    throw err;
+  }
 };
+
 
 
 app.use(express.json());
