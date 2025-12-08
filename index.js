@@ -175,6 +175,30 @@ app.post("/login", async (req, res) => {
         res.status(500).json({ message: "Error logging in", error });
     }
 });
+app.put("/:id", async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id, 
+      req.body, 
+      { new: true } 
+    );
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete("/:id", async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+
 
  //MongoDB connect and Connection validation
 async function main() {
