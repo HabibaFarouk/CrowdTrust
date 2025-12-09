@@ -30,7 +30,6 @@ const getUserProfileWithDonations = async (userId) => {
   };
 };
 
-
   // Update campaign (simple, server-side). Fields allowed: title, description, amountRequested, category, status
   app.put('/campaigns/:id', async (req, res) => {
     try {
@@ -92,14 +91,36 @@ const getUserProfileWithDonations = async (userId) => {
 
   //Donation CRUD operations
 const addDonation = async (donationData) => {
+  try {
+    const { campaignId, amount } = donationData;
+    const campaign = await Campaign.findById(campaignId);
+    const remainingAmount = campaign.amountRequested - campaign.amountCollected;
+    if (amount > remainingAmount) {
+      throw new Error(
+        `Donation exceeds the required amount. Remaining needed: ${remainingAmount}`
+      );
+    }
     const donation = await Donation.create(donationData);
-    const { campaignId, amount } = donation;
     const updatedCampaign = await Campaign.findByIdAndUpdate(
       campaignId,
-      { $inc: { amountCollected: amount } },
+      { 
+        $inc: { amountCollected: amount },
+        ...(amount === remainingAmount && { status: "Completed" })
+      },
       { new: true }
-      );
+    );
+    return {
+      message: "Donation added successfully",
+      donation,
+      updatedCampaign
+    };
+
+  } catch (err) {
+    console.error(err.message);
+    throw err;
+  }
 };
+
 
 
 app.get("/", (req, res) => {
@@ -278,8 +299,6 @@ app.post("/login", async (req, res) => {
         res.status(500).json({ message: "Error logging in", error });
     }
 });
-
-
 
  //MongoDB connect and Connection validation
 async function main() {
