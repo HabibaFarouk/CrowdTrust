@@ -84,7 +84,8 @@ const getUserProfileWithDonations = async (userId) => {
   
       return res.json({ message: 'Campaign deleted' });
     } catch (err) {
-      console.error('Failed to delete campaign:', err);
+      console.error
+      ('Failed to delete campaign:', err);
       return res.status(500).json({ error: 'Failed to delete campaign' });
     }
   });
@@ -333,5 +334,5 @@ async function main() {
         console.log("Server is running on http://localhost:3000");
     });
   } 
-
+//output error
 main().catch(err => console.log(err));
