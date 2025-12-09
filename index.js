@@ -29,22 +29,33 @@ const getUserProfileWithDonations = async (userId) => {
 const addDonation = async (donationData) => {
   try {
     const { campaignId, amount } = donationData;
+
+    // Find the campaign first
     const campaign = await Campaign.findById(campaignId);
+
+    if (!campaign) {
+      throw new Error("Campaign not found");
+    }
+
     const remainingAmount = campaign.amountRequested - campaign.amountCollected;
+
     if (amount > remainingAmount) {
       throw new Error(
         `Donation exceeds the required amount. Remaining needed: ${remainingAmount}`
       );
     }
+
     const donation = await Donation.create(donationData);
+
     const updatedCampaign = await Campaign.findByIdAndUpdate(
       campaignId,
-      { 
+      {
         $inc: { amountCollected: amount },
         ...(amount === remainingAmount && { status: "Completed" })
       },
       { new: true }
     );
+
     return {
       message: "Donation added successfully",
       donation,
@@ -67,44 +78,56 @@ app.get("/", (req, res) => {
 
 
  //Campign CRUD operations 
-app.get("/campaigns",async(req,res)=>{
-    const campaigns = await Campaign.find();
+app.get("/campaigns", async (req, res) => {
+  try {
+    const campaigns = await Campaign.find({ status: "approved" });
+
     res.json(
-    campaigns.map(c => ({
-      title: c.title,
-      amountRequested: c.amountRequested,
-      amountCollected: c.amountCollected,
-      progress: ((c.amountCollected / c.amountRequested) * 100).toFixed(2) + "%"
-    }))
-  );
+      campaigns.map(c => ({
+        title: c.title,
+        description: c.description,
+        category: c.category,
+        amountRequested: c.amountRequested,
+        amountCollected: c.amountCollected,
+        progress: ((c.amountCollected / c.amountRequested) * 100).toFixed(2) + "%"
+      }))
+    );
+
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch campaigns" });
+  }
 });
 
-app.get("/campaigns/:id",async(req,res)=>{
+
+app.get("/campaigns/:id", async (req, res) => {
+  try {
     const campaign = await Campaign.findById(req.params.id);
-    if (!campaign) {
-      return res.status(404).json({ error: "Campaign not found" });
-    }
-    res.json(
-    campaigns.map(c => ({
-      title: c.title,
-      amountRequested: c.amountRequested,
-      amountCollected: c.amountCollected,
-      progress: ((c.amountCollected / c.amountRequested) * 100).toFixed(2) + "%"
-    }))
-  );
+
+    const response = {
+      title: campaign.title,
+      amountRequested: campaign.amountRequested,
+      amountCollected: campaign.amountCollected,
+      progress:
+        ((campaign.amountCollected / campaign.amountRequested) * 100).toFixed(2) + "%"
+    };
+
+    res.json(response);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
 });
+
 
 //Donation CRUD operations
-app.get("/donations",async(req,res)=>{
-     try {
-    const donations = await Donation.find()
-      .populate("userId", "fullName email")
-      .populate("campaignId", "title")
-      .lean();
+app.get("/donations/:campaignId", async (req, res) => {
+  try {
+    const { campaignId } = req.params;
+    const donations = await Donation.find({ campaignId });
+    if (!donations || donations.length === 0) {
+      return res.status(404).json({ error: "No donations found for this campaign" });
+    }
     res.json(
       donations.map(d => ({
-        user: d.userId?.fullName || "Unknown User",
-        campaign: d.campaignId?.title || "Unknown Campaign",
         amount: d.amount,
         date: d.date
       }))
@@ -114,14 +137,28 @@ app.get("/donations",async(req,res)=>{
   }
 });
 
-app.post("/donations", async (req, res) => {
+
+
+app.post("/donations/:userId", async (req, res) => {
   try {
-    await addDonation(req.body);
-    return res.json({ message: "Donation added" });
+    const { campaignId, amount } = req.body;
+
+    if (!campaignId || !amount) {
+      return res.status(400).json({ error: "campaignId and amount are required" });
+    }
+    const { userId } = req.params;
+    const result = await addDonation({ userId, campaignId, amount });
+    res.json({
+      message: "Donation added",
+      donation: result.donation,
+      updatedCampaign: result.updatedCampaign
+    });
   } catch (err) {
-    return res.status(500).json({ error: "Donation failed" });
+    res.status(500).json({ error: err.message });
   }
 });
+
+
 
 //User CRUD operations 
 app.get("/profile/:id", async (req, res) => {
@@ -175,7 +212,7 @@ app.post("/login", async (req, res) => {
         res.status(500).json({ message: "Error logging in", error });
     }
 });
-app.put("/:id", async (req, res) => {
+app.put("/profile/:id", async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id, 
@@ -188,7 +225,7 @@ app.put("/:id", async (req, res) => {
   }
 });
 
-app.delete("/:id", async (req, res) => {
+app.delete("/profile/:id", async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: "User deleted successfully" });
