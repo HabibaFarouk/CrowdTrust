@@ -29,24 +29,17 @@ const getUserProfileWithDonations = async (userId) => {
 const addDonation = async (donationData) => {
   try {
     const { campaignId, amount } = donationData;
-
-    // Find the campaign first
     const campaign = await Campaign.findById(campaignId);
-
     if (!campaign) {
       throw new Error("Campaign not found");
     }
-
     const remainingAmount = campaign.amountRequested - campaign.amountCollected;
-
     if (amount > remainingAmount) {
       throw new Error(
         `Donation exceeds the required amount. Remaining needed: ${remainingAmount}`
       );
     }
-
     const donation = await Donation.create(donationData);
-
     const updatedCampaign = await Campaign.findByIdAndUpdate(
       campaignId,
       {
@@ -55,13 +48,11 @@ const addDonation = async (donationData) => {
       },
       { new: true }
     );
-
     return {
       message: "Donation added successfully",
       donation,
       updatedCampaign
     };
-
   } catch (err) {
     console.error(err.message);
     throw err;
