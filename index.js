@@ -3,10 +3,11 @@ import mongoose from "mongoose";
 import Campaign from "./Models/CampaignSchema.js";
 import Donation from "./Models/DonationSchema.js";
 import User from "./Models/UserSchema.js";
+import bcrypt from "bcrypt"; 
 
 const app = express();
 
-// parse JSON and HTML form submissions early so all routes have access to `req.body`
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -249,25 +250,30 @@ app.get("/profile/:id", async (req, res) => {
   }
 });
 
+              
+
 app.post("/signup", async (req, res) => {
     try {
-        const { fullName, email, password, phone } = req.body;
+        const { fullName, email, password, phone } = req.body
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "Email already registered" });
         }
+        const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({
             fullName,
             email,
-            password,
+            password: hashedPassword,  
             phone
         });
         await newUser.save();
-        res.status(201).json({ message: "User registered successfully" });
+        res.status(201).json({ message: "User registered successfully" });      
+        
     } catch (error) {
         res.status(500).json({ message: "Error registering user", error });
     }
 });
+
 
 app.post("/login", async (req, res) => {
     try {
@@ -276,7 +282,8 @@ app.post("/login", async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-        if (user.password !== password) {
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
             return res.status(400).json({ message: "Incorrect password" });
         }
         res.status(200).json({
@@ -319,7 +326,7 @@ app.delete("/profile/:id", async (req, res) => {
  //MongoDB connect and Connection validation
 async function main() {
   await mongoose.connect("mongodb+srv://habibamfaroukk_db_user:BoqJQLXgJzldvjB3@cluster0.26s4lb0.mongodb.net/CrowdTrust?retryWrites=true&w=majority");
-
+    
     console.log("Connected to MongoDB");
     Campaign.find().then(campaigns => {
         console.log("Campaign from MongoDB:", Campaign);
