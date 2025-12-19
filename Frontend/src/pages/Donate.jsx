@@ -30,7 +30,7 @@ export default function Donate(){
       <p>Requested: {campaign.amountRequested} — Collected: {campaign.amountCollected}</p>
       <form onSubmit={submit} style={{ display:'grid', gap:8, maxWidth:320 }}>
         <input type="number" value={amount} onChange={e=>setAmount(e.target.value)} placeholder="Amount" />
-        <button type="submit">Donate</button>
+        <button className="btn" type="submit">Donate</button>
       </form>
     </div>
   );

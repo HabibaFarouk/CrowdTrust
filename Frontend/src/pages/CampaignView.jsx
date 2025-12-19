@@ -21,7 +21,7 @@ export default function CampaignView(){
       <p><strong>Requested:</strong> {campaign.amountRequested}</p>
       <p><strong>Collected:</strong> {campaign.amountCollected}</p>
       <p><strong>Progress:</strong> {campaign.progress}</p>
-      <Link to={`/donate/${id}`}><button>Donate</button></Link>
+      <Link to={`/donate/${id}`}><button className="btn">Donate</button></Link>
     </div>
   );
 }

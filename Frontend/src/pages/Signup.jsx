@@ -35,7 +35,7 @@ export default function Signup() {
         <input placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} />
         <input placeholder="Password" type="password" value={password} onChange={e=>setPassword(e.target.value)} />
         <input placeholder="Phone" value={phone} onChange={e=>setPhone(e.target.value)} />
-        <button type="submit">Create account</button>
+        <button className="btn" type="submit">Create account</button>
         {error && <div style={{ color: "#ff8080" }}>{error}</div>}
       </form>
     </div>

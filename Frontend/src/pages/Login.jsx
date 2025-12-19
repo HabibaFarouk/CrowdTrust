@@ -32,7 +32,7 @@ export default function Login() {
       <form onSubmit={submit} style={{ display: "grid", gap: 8, maxWidth: 380 }}>
         <input placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} />
         <input placeholder="Password" type="password" value={password} onChange={e=>setPassword(e.target.value)} />
-        <button type="submit">Login</button>
+        <button className="btn" type="submit">Login</button>
         {error && <div style={{ color: "#ff8080" }}>{error}</div>}
       </form>
     </div>

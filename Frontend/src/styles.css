@@ -1,25 +1,28 @@
 :root{
-  --bg: #0f1720;
-  --card: #12151a;
-  --muted: #9aa4b2;
-  --accent: #6c7cff;
-  --text: #e6eef8;
+  --bg: #E8EDF8;
+  --card: #F5F8FE;
+  --muted: #6B7A95;
+  --accent: #1F2D62;
+  --text: #1F2D62;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter, system-ui, Arial, sans-serif;background:linear-gradient(180deg,#06101a 0%, #08121a 100%);color:var(--text)}
+body{margin:0;font-family:Inter, system-ui, Arial, sans-serif;background:linear-gradient(180deg,#E8EDF8 0%, #F5F8FE 100%);color:var(--text)}
 .container{max-width:1100px;margin:28px auto;padding:16px}
-.nav{display:flex;justify-content:space-between;align-items:center;padding:12px 0;margin-bottom:16px}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;background:#fff;margin:0;position:fixed;top:0;left:0;right:0;z-index:50;border-bottom:1px solid rgba(31,45,98,0.1)}
+.container{padding-top:84px}
 .nav a{color:var(--text);margin-right:12px;text-decoration:none}
 .brand{font-weight:700;color:var(--accent);margin-right:18px}
-.card{display:flex;justify-content:space-between;background:var(--card);padding:16px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);margin-bottom:12px}
+.card{display:flex;justify-content:space-between;background:var(--card);padding:16px;border-radius:10px;border:1px solid rgba(31,45,98,0.08);margin-bottom:12px}
 .card-body{max-width:72%}
 .card-title{margin:0 0 8px 0}
 .card-desc{color:var(--muted);margin:0 0 8px 0}
 .muted{color:var(--muted);margin:0;font-size:0.95rem}
 .card-actions{display:flex;align-items:center;gap:8px}
+.progress-wrap{background:rgba(31,45,98,0.1);height:12px;border-radius:8px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#1F2D62,#2D3F7F);width:0%;transition:width 600ms ease}
 .btn{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
-.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
-form input, form textarea, form select{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text)}
+.btn.ghost{background:transparent;border:1px solid var(--accent);color:var(--accent)}
+form input, form textarea, form select{padding:8px;border-radius:8px;border:1px solid rgba(31,45,98,0.15);background:#fff;color:var(--text)}
 h1{margin-top:0}
 .muted small{color:var(--muted)}
 

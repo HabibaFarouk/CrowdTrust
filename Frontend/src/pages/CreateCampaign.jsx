@@ -33,7 +33,7 @@ export default function CreateCampaign(){
           <option>Emergency</option>
           <option>Other</option>
         </select>
-        <button type="submit">Create</button>
+        <button className="btn" type="submit">Create</button>
       </form>
     </div>
   );

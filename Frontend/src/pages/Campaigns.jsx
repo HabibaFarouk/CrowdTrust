@@ -8,10 +8,22 @@ export default function Campaigns() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.getCampaigns().then(data => {
-      setCampaigns(data || []);
-      setLoading(false);
-    }).catch(() => setLoading(false));
+    let mounted = true;
+    async function fetchAll(){
+      try{
+        const data = await api.getCampaigns();
+        if(!mounted) return;
+        setCampaigns(data || []);
+      }catch(err){
+        console.error('Failed to load campaigns', err);
+      }finally{
+        if(mounted) setLoading(false);
+      }
+    }
+
+    fetchAll();
+    const t = setInterval(fetchAll, 5000); // poll every 5s for near-realtime updates
+    return ()=>{ mounted = false; clearInterval(t); };
   }, []);
 
   if (loading) return <div><NavMenu />Loading campaigns...</div>;

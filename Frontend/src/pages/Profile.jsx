@@ -43,8 +43,8 @@ export default function Profile(){
             <ul>{data.donations.map((d,i)=>(<li key={i}>{d.amount} — {new Date(d.date).toLocaleString()} — {d.campaignTitle}</li>))}</ul>
           ) : <p>No donations yet.</p>}
           <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={()=>setEditing(true)}>Edit</button>
-            <button onClick={remove}>Delete account</button>
+            <button className="btn" onClick={()=>setEditing(true)}>Edit</button>
+            <button className="btn" onClick={remove}>Delete account</button>
           </div>
         </div>
       ) : (
@@ -53,8 +53,8 @@ export default function Profile(){
           <input value={form.email || ""} onChange={e=>setForm({...form, email: e.target.value})} />
           <input value={form.phone || ""} onChange={e=>setForm({...form, phone: e.target.value})} />
           <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={save}>Save</button>
-            <button onClick={()=>setEditing(false)}>Cancel</button>
+            <button className="btn" onClick={save}>Save</button>
+            <button className="btn ghost" onClick={()=>setEditing(false)}>Cancel</button>
           </div>
         </div>
       )}
