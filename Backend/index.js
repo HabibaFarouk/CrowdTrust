@@ -1,15 +1,17 @@
 import express from "express";
+import cors from "cors";
 import mongoose from "mongoose";
 import Campaign from "./Models/CampaignSchema.js";
 import Donation from "./Models/DonationSchema.js";
 import User from "./Models/UserSchema.js";
-import bcrypt from "bcrypt"; 
+import bcrypt from "bcryptjs";
 
 const app = express();
 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 //Helper Function 
 const getUserProfileWithDonations = async (userId) => {
@@ -75,20 +77,22 @@ app.get("/", (req, res) => {
 
  //Campign CRUD operations 
  
-app.get("/campaigns",async(req,res)=>{
+app.get("/campaigns", async (req, res) => {
+  try {
     const campaigns = await Campaign.find();
-    try{
     res.json(
-      campaigns.map(c => ({
+      campaigns.map((c) => ({
+        _id: c._id,
         title: c.title,
         description: c.description,
         category: c.category,
         amountRequested: c.amountRequested,
         amountCollected: c.amountCollected,
-        progress: ((c.amountCollected / c.amountRequested) * 100).toFixed(2) + "%"
+        progress:
+          ((c.amountCollected / c.amountRequested) * 100).toFixed(2) + "%",
+        createdAt: c.createdAt,
       }))
     );
-
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch campaigns" });
   }
@@ -98,13 +102,21 @@ app.get("/campaigns",async(req,res)=>{
 app.get("/campaigns/:id", async (req, res) => {
   try {
     const campaign = await Campaign.findById(req.params.id);
+    if (!campaign) return res.status(404).json({ error: "Campaign not found" });
+
+    const progress = campaign.amountRequested
+      ? ((campaign.amountCollected / campaign.amountRequested) * 100).toFixed(2) + "%"
+      : "0%";
 
     const response = {
+      _id: campaign._id,
       title: campaign.title,
+      description: campaign.description,
+      category: campaign.category,
       amountRequested: campaign.amountRequested,
       amountCollected: campaign.amountCollected,
-      progress:
-        ((campaign.amountCollected / campaign.amountRequested) * 100).toFixed(2) + "%"
+      progress,
+      createdAt: campaign.createdAt,
     };
 
     res.json(response);
@@ -127,6 +139,7 @@ app.post('/campaigns/:id', async (req, res) => {
       return res.status(400).json({ error: 'amountRequested must be a positive number' });
     }
     const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: 'User not found' });
     const allowedCategories = ["Medical", "Education", "Community", "Emergency", "Other"];
     const safeCategory = (typeof category === 'string' && allowedCategories.includes(category)) ? category : 'Other';
     const campaign = await Campaign.create({
@@ -139,9 +152,9 @@ app.post('/campaigns/:id', async (req, res) => {
     return res.status(201).json({ message: 'Campaign created', campaign });
   } catch (err) {
     console.error('Failed to create campaign (by param):', err);
-    }  
+    return res.status(500).json({ error: 'Failed to create campaign' });
   }
-);
+});
 
 app.put('/campaigns/:id', async (req, res) => {
   try {

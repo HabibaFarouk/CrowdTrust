@@ -1,0 +1,30 @@
+:root{
+  --bg: #0f1720;
+  --card: #12151a;
+  --muted: #9aa4b2;
+  --accent: #6c7cff;
+  --text: #e6eef8;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter, system-ui, Arial, sans-serif;background:linear-gradient(180deg,#06101a 0%, #08121a 100%);color:var(--text)}
+.container{max-width:1100px;margin:28px auto;padding:16px}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:12px 0;margin-bottom:16px}
+.nav a{color:var(--text);margin-right:12px;text-decoration:none}
+.brand{font-weight:700;color:var(--accent);margin-right:18px}
+.card{display:flex;justify-content:space-between;background:var(--card);padding:16px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);margin-bottom:12px}
+.card-body{max-width:72%}
+.card-title{margin:0 0 8px 0}
+.card-desc{color:var(--muted);margin:0 0 8px 0}
+.muted{color:var(--muted);margin:0;font-size:0.95rem}
+.card-actions{display:flex;align-items:center;gap:8px}
+.btn{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+form input, form textarea, form select{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text)}
+h1{margin-top:0}
+.muted small{color:var(--muted)}
+
+/* Responsive */
+@media(max-width:720px){
+  .card{flex-direction:column}
+  .card-body{max-width:100%}
+}
