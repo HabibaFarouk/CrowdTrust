@@ -30,7 +30,7 @@ export default function Profile(){
   if(!data) return <div><NavMenu/>Loading profile...</div>;
 
   return (
-    <div style={{ padding: 16 }}>
+    <div style={{ padding: 16, textAlign: 'left' }}>
       <NavMenu />
       <h1>Profile</h1>
       {!editing ? (

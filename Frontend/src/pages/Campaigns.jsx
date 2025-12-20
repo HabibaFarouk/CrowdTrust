@@ -29,7 +29,7 @@ export default function Campaigns() {
   if (loading) return <div><NavMenu />Loading campaigns...</div>;
 
   return (
-    <div className="container">
+    <div className="container" style={{ textAlign: 'left' }}>
       <NavMenu />
       <h1>Campaigns</h1>
       {(!campaigns || campaigns.length === 0) ? <p>No campaigns yet.</p> : (

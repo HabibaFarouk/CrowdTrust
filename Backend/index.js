@@ -27,7 +27,7 @@ const getUserProfileWithDonations = async (userId) => {
     user,
     donations: donations.map(d => ({
       amount: d.amount,
-      date: d.createdAt,
+      date: d.date,
       campaignTitle: d.campaignId?.title || "Unknown Campaign"
     }))
   };
